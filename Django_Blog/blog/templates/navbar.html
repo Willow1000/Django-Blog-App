@@ -6,23 +6,24 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% if user.is_authenticated %}
-          <li>
-            <a class="nav-link" href={% url 'logout' %}>Logout</a>
-          </li>
-          
-          {% else %}
           <li>
             <a class="nav-link" href={% url 'registration' %}>Register</a>
           </li>
           <li>
             <a class="nav-link" href={% url 'login' %}>Login</a>
           </li>
+          <li>
+            <a class = "nav-link" href={% url "blogs" %}>Blogs</a>
+          </li> 
           {% if user.role == "blogger" or user.role == "admin" %}
           <li>
             <a class="nav-link" href={% url 'createblog' %}>CreateBlog</a>
-          </li>
+          </li> 
           {% endif %}
+          {% if user.is_authenticated %}
+          <li>
+            <a class="nav-link" href={% url 'logout' %}>Logout</a>
+          </li>
           {% endif %}
         </ul>
      

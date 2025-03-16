@@ -24,13 +24,13 @@ class CustomLoginView(LoginView):
     next_page= reverse_lazy('home')
 
 class CustomLogoutView(LogoutView):
-    next_page = reverse_lazy("login")    
+    next_page = reverse_lazy("home")    
     def dispatch(self, request, *args, **kwargs):
         logout(request)  # Ensure session is cleared
         return redirect(self.next_page)
 
 
-class CreateBlogView(LoginRequiredMixin,CreateView):
+class CreateBlogView(UserPassesTestMixin,LoginRequiredMixin,CreateView):
     model = Blog
     fields = ["category","Title",'Cover_image',"Content"]
     template_name = "createblog.html"
@@ -48,20 +48,28 @@ class ListBlogView(ListView):
     template_name = "blogs.html"
     context_object_name = 'blogs'
 
-class BlogView(DetailView):
+class BlogView(LoginRequiredMixin,DetailView):
     model=Blog
     template_name="blog.html"
-    context_object_name="blog"    
+    context_object_name="blog"  
+    login_url = reverse_lazy('login')  
 
-class DeleteBlogView(DeleteView):
+class DeleteBlogView(UserPassesTestMixin,LoginRequiredMixin,DeleteView):
     model=Blog
     template_name="blog.html"
     context_object_name="blog"
     success_url = reverse_lazy('blogs')  
+    def test_func(self):
+        return self.request.user.role == "blogger" or self.request.user.role == "admin" 
+    
 
-class UpdateblogView(UpdateView):
+class UpdateblogView(UserPassesTestMixin,LoginRequiredMixin,UpdateView):
     model = Blog
     template_name="updateblog.html"   
     success_url = reverse_lazy("blogs") 
     fields = ["Title","Cover_image","Content",'category']
     context_object_name='record'
+
+    def test_func(self):
+        return self.request.user.role == "blogger" or self.request.user.role == "admin" 
+    

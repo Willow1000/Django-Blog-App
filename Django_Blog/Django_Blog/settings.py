@@ -59,6 +59,8 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_URL = 'login/'
+
 WSGI_APPLICATION = 'Django_Blog.wsgi.application'
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 MEDIA_URL='/media/'
