@@ -49,6 +49,9 @@ class Comment(models.Model):
     time = models.DateTimeField(default=now)
     likes = models.ForeignKey(Like,on_delete=models.CASCADE)
 
+class Links(models.Model):
+    keyword = models.CharField(max_length=100)
+    url = models.URLField(max_length=100)
 class Blog(models.Model):
     CATEGORY_CHOICES = (("Beauty","beauty"),
                         ("Lifestyle","lifestyle"),
@@ -59,7 +62,12 @@ class Blog(models.Model):
     Time = models.DateTimeField(default=now)
     category = models.CharField(max_length=100,choices=CATEGORY_CHOICES)
     Title = models.CharField(max_length=250)
-    Cover_image = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
-    Blogger = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    Likes = models.ForeignKey(Like,on_delete=models.CASCADE)
-    Comments = models.ForeignKey(Comment,on_delete=models.CASCADE)
+    Content = models.TextField(max_length=5000)
+    Cover_image = models.ImageField(upload_to='blog_images/', blank=True,null=True)
+    Blogger = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="blogger")
+    # Relevant_links = models.ManyToManyField(Links, blank=True)
+    # Likes = models.ForeignKey(Like,on_delete=models.CASCADE,blank=True)
+    # Comments = models.ForeignKey(Comment,on_delete=models.CASCADE,blank=True,default="")
+
+    def __str__(self):
+        return self.Title

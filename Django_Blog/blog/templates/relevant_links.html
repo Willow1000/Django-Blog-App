@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Multiple URLs</title>
+    <script>
+        function addField() {
+            var container = document.getElementById("urlContainer");
+            var div = document.createElement("div");
+            div.classList.add("url-entry");
+            div.innerHTML = `
+                <input type="text" name="keyword" placeholder="Topic" required>
+                <input type="url" name="url" placeholder="URL" required>
+                <button type="button" onclick="removeField(this)">Remove</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeField(button) {
+            button.parentElement.remove();
+        }
+    </script>
+    <style>
+        .url-entry {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Add Multiple Links</h2>
+    <form action="/submit-urls/" method="POST">
+        {% csrf_token %}
+        <div id="urlContainer">
+            <div class="url-entry">
+                <input type="text" name="topics[]" placeholder="Topic" required>
+                <input type="url" name="urls[]" placeholder="URL" required>
+                <button type="button" onclick="removeField(this)">Remove</button>
+            </div>
+        </div>
+        <button type="button" onclick="addField()">+</button>
+        <br><br>
+        {% comment %} <input type="submit" value="Submit"> {% endcomment %}
+    </form>
+
+</body>
+</html>

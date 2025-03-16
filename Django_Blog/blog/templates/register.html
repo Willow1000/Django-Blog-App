@@ -5,7 +5,7 @@
     <h1>Register</h1>
     </br>
     
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
     {% csrf_token %}
     {% if form.errors %}
     <div class="alert alert-warning alert-dismissible fade show w-50 mt-5" role="alert">
