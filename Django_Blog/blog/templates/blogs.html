@@ -7,7 +7,9 @@
         <div class="card mb-3" style="min-width: 540px;">
             <div class="row g-0">
               <div class="col-md-4">
+                {% if blog.Cover_image.url != None %}
                 <img src={{ blog.Cover_image.url }} class="img-fluid rounded-start" alt="...">
+                {% endif %}
               </div>
               <div class="col-md-8">
                 <div class="card-body">
@@ -23,6 +25,7 @@
     {% endfor %}    
     {% else %}
       <h1>No blogs were found</h1>
+      <a href = {% url "blogs" %}>Want To Explore Other Blogs?</a>
     {% endif %} 
   
 {% endblock %}

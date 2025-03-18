@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Comment{% endblock %}
+{% block content %}
+    <form method="POST",action="" class="w-50 mt-5">
+        {% csrf_token %}
+        <div class="mb-3">{{ form.as_p }}</div>
+        <button type="submit" class="btn btn-secondary required ">Comment</button>
+    </form>    
+
+{% endblock %}

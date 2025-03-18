@@ -1,0 +1,17 @@
+{% extends "parent.html" %}
+{% block title %}Comments{% endblock %}
+{% block content %}
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="card mb-3" style="min-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ comment.user.username }}</h5>
+              <p class="card-text">{{ comment.content }}</p>
+              <p class="card-text"><small class="text-body-secondary">{{ comment.created_at }}</small></p>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+{% endblock %}

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Permission, Group
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.timezone import now
+from taggit.managers import TaggableManager
+
 
 # Create your models here.
 class CustomUserManager(BaseUserManager):
@@ -38,20 +40,8 @@ class CustomUser(AbstractUser):
     user_permissions = models.ManyToManyField(Permission,related_name="customuser_permission")
     groups = models.ManyToManyField(Group,related_name="customuser_group")
 
+    # likes = models.ForeignKey(Like,on_delete=models.CASCADE)
 
-class Like(models.Model):
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    time = models.DateTimeField(default=now)
-
-class Comment(models.Model):
-    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    content = models.TextField(max_length=500)
-    time = models.DateTimeField(default=now)
-    likes = models.ForeignKey(Like,on_delete=models.CASCADE)
-
-class Links(models.Model):
-    keyword = models.CharField(max_length=100)
-    url = models.URLField(max_length=100)
 class Blog(models.Model):
     CATEGORY_CHOICES = (("Beauty","beauty"),
                         ("Lifestyle","lifestyle"),
@@ -65,9 +55,20 @@ class Blog(models.Model):
     Content = models.TextField(max_length=5000)
     Cover_image = models.ImageField(upload_to='blog_images/', blank=True,null=True)
     Blogger = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name="blogger")
-    # Relevant_links = models.ManyToManyField(Links, blank=True)
-    # Likes = models.ForeignKey(Like,on_delete=models.CASCADE,blank=True)
-    # Comments = models.ForeignKey(Comment,on_delete=models.CASCADE,blank=True,default="")
+    tags = TaggableManager()
+    Likes = models.PositiveIntegerField(default=0)
+    Relevant_links = models.JSONField(blank=True,null=True)
 
     def __str__(self):
         return self.Title
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
+    time_created = models.DateTimeField(auto_now_add=True)
+    time_updated = models.DateTimeField(auto_now=True)    
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
+    content = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

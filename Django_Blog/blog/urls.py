@@ -10,7 +10,10 @@ urlpatterns = [
     path('blogs/',ListBlogView.as_view(),name="blogs"),
     path("blog/<int:pk>/",BlogView.as_view(),name="blog"),
     path("delete/<int:pk>/",DeleteBlogView.as_view(),name = "delete"),
-    path("update/<int:pk>/",UpdateblogView.as_view(),name="update")
+    path("update/<int:pk>/",UpdateblogView.as_view(),name="update"),
+    path("blog/<int:pk>/comment",CreateComment.as_view(),name="comment"),
+    path("blog/<int:pk>/comments",Comments.as_view(),name="comments"),
+    path("tag/<slug:tag_slug>/",TagView.as_view(),name="tags")
 ]
 
 from Django_Blog import settings

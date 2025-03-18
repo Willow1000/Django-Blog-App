@@ -1,8 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-
+import json
 from django import forms
-from .models import CustomUser
-
+from .models import *
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}),required=True)
@@ -35,3 +34,18 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={"class":"form-control","placeholder":"Password"}))        
     class Meta:
         model = CustomUser
+
+
+class CommentForm(forms.ModelForm):
+    content = forms.CharField(widget = forms.Textarea(attrs={"rows":3,"placeholder":"Comment"}),max_length=500,required=True)
+
+    class Meta:
+        model = Comment
+        fields=['content']
+
+    def clean_content(self):
+        content = self.cleaned_data.get("content").strip()
+        if len(content) == 0:
+            forms.ValidationError("Can not Post Empty Comment")
+        return content        
+    

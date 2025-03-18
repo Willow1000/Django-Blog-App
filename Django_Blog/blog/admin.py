@@ -10,7 +10,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 class BlogAdmin(admin.ModelAdmin):
     ist_display = ["Title"]
-    list_filter = ["Title","category"]
-    search_fields = ["Title","category"]
+    list_filter = ["Title","category","tags"]
+    search_fields = ["Title","category","tags"]
 admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(Blog,BlogAdmin)
