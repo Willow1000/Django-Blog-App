@@ -7,6 +7,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import *
 from taggit.models import Tag
+from rest_framework import viewsets
+from .serializers import *
 # Create your views here.
 
 class RegistrationView(CreateView):
@@ -104,10 +106,11 @@ class CreateComment(CreateView):
     def get_success_url(self):
         return reverse_lazy("blog",kwargs = {"pk":self.kwargs["pk"]})
     
-class Comments(ListView):
+class Comments(LoginRequiredMixin,ListView):
     model = Comment
     template_name = "comments.html"
     context_object_name = "comments"    
+    login_url = reverse_lazy("login")
 
     def get_queryset(self):
         blog = get_object_or_404(Blog,pk=self.kwargs['pk'])
@@ -132,3 +135,7 @@ class TagView(ListView):
 )
         return Blog.objects.filter(tags__name__icontains = tag_slug)
       
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all()

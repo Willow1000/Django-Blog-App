@@ -1,5 +1,11 @@
 from django.urls import path, include
 from .views import *
+from rest_framework.routers import DefaultRouter
+
+
+router = DefaultRouter()
+router.register("user",CustomUserViewSet)
+
 
 urlpatterns = [
     path("",HomeView.as_view(),name="home"),
@@ -13,7 +19,8 @@ urlpatterns = [
     path("update/<int:pk>/",UpdateblogView.as_view(),name="update"),
     path("blog/<int:pk>/comment",CreateComment.as_view(),name="comment"),
     path("blog/<int:pk>/comments",Comments.as_view(),name="comments"),
-    path("tag/<slug:tag_slug>/",TagView.as_view(),name="tags")
+    path("tag/<slug:tag_slug>/",TagView.as_view(),name="tags"),
+    path("api",include(router.urls))
 ]
 
 from Django_Blog import settings
