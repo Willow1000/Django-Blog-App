@@ -41,7 +41,8 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group,related_name="customuser_group")
 
     # likes = models.ForeignKey(Like,on_delete=models.CASCADE)
-
+    def __str__(self):
+        return self.username
 class Blog(models.Model):
     CATEGORY_CHOICES = (("Beauty","beauty"),
                         ("Lifestyle","lifestyle"),
@@ -61,6 +62,8 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.Title
+    
+    
 class Like(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     blog = models.ForeignKey(Blog,on_delete=models.CASCADE)

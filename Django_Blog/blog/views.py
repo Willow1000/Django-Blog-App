@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import redirect,get_object_or_404
 from django.views.generic import CreateView,TemplateView,ListView,DetailView,UpdateView,DeleteView
 from .forms import SignUpForm,LoginForm,CommentForm
 from django.urls import reverse_lazy
@@ -6,9 +6,11 @@ from django.contrib.auth.views import LoginView ,LogoutView
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import *
-from taggit.models import Tag
+from rest_framework.permissions import IsAuthenticated
+# from taggit.models import Tag
 from rest_framework import viewsets
 from .serializers import *
+from django.contrib import messages
 # Create your views here.
 
 class RegistrationView(CreateView):
@@ -37,7 +39,7 @@ class CreateBlogView(UserPassesTestMixin,LoginRequiredMixin,CreateView):
     model = Blog
     fields = ["category","Title",'Cover_image',"Content","tags"]
     template_name = "createblog.html"
-    success_url = reverse_lazy("home")
+    success_url = reverse_lazy("blogs")
 
     def test_func(self):
         return self.request.user.role == "Blogger" or self.request.user.role == "Admin" 
@@ -104,7 +106,7 @@ class CreateComment(CreateView):
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse_lazy("blog",kwargs = {"pk":self.kwargs["pk"]})
+        return reverse_lazy("comments",kwargs = {"pk":self.kwargs["pk"]})
     
 class Comments(LoginRequiredMixin,ListView):
     model = Comment
@@ -124,18 +126,27 @@ class Comments(LoginRequiredMixin,ListView):
     
     #     return super().get_context_data(**kwargs)
 
-class TagView(ListView):
+class TaggedBlogsView(ListView):
     template_name = "blogs.html"
     # model = Blog
     context_object_name = "blogs"
 
     def get_queryset(self):
         tag_slug = self.kwargs['tag_slug']
-        print(Blog.objects.filter(tags__name__icontains = tag_slug)
-)
         return Blog.objects.filter(tags__name__icontains = tag_slug)
       
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
+    permission_classes = [IsAuthenticated]
+
+class BlogViewSet(viewsets.ModelViewSet):
+    serializer_class = BlogSerializer    
+    queryset = Blog.objects.all()
+    permission_classes = [IsAuthenticated]
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer    
+    permission_classes = [IsAuthenticated]

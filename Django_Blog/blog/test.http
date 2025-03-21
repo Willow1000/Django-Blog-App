@@ -1,0 +1,23 @@
+### Get tokens
+POST http://localhost:8000/api/token/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username":"super",
+    "password":"super@123"
+}
+
+### Get blogs
+GET http://localhost:8000/api/blogApi
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQyNDY2MTU1LCJpYXQiOjE3NDI0NTQ2MDcsImp0aSI6ImQ1Y2EzNjYyODBjNTRjNDY4NjRhYmM4ZjRmOGMyMWI2IiwidXNlcl9pZCI6MX0.j5a6JvuEJMn-cG56z2LdSOy66JQKRM8gwCbipm59xEc
+
+### Get Refresh Token
+
+POST http://localhost:8000/api/token/refresh/
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0Njc3NDYwNywiaWF0IjoxNzQyNDU0NjA3LCJqdGkiOiJmNWQ5ZjUyZWI2Njg0MWY1YjFkOWM0OWU5ZjkxYzBiMiIsInVzZXJfaWQiOjF9.vymXAEkPl5gFI63NCssBjc4qNl4eJDYWRgGcKecNObg"
+}

@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-import json
 from django import forms
 from .models import *
+
+from django import forms
+
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Email Address'}),required=True)
