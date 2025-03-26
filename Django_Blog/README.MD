@@ -98,3 +98,62 @@ from django.dispatch import receiver
 <!-- Apps.py -->
 def ready(self):
     from .signals import "signal"
+
+
+# MAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = "wilkinsondari7@gmail.com"
+EMAIL_HOST_PASSWORD = "vsgc hjli dvhl ahwv"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+
+# ALLAUTH
+<!-- settings.py -->
+INSTALLED_APPS :"allauth","allauth.account","allauth.socialaccount",'allauth.socialaccount.providers.google'...
+
+OPTIONS IN TEMPLATES :'django.template.context_processors.request'
+
+AUTHENTICATION_BACKENDS: "allauth.account.auth_backends.AuthenticationBackend"
+
+SOCIALACCOUNT_PROVIDERS: "google":{
+    "APP":{
+        "client_id":,
+        "secret":,
+        "key":,
+    }
+}
+
+urlpatterns: path("accounts/",include("allauth.urls))
+
+
+# CustomUserManager
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        """Creates and returns a regular user with the given email and password."""
+        if not email:
+            raise ValueError("The Email field must be set")
+        
+        email = self.normalize_email(email)  # Normalize email (lowercase)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)  # Hash password
+        user.save(using=self._db)  # Save to database
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Creates and returns a superuser with all permissions."""
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self.create_user(email, password, **extra_fields)
+
+
+
